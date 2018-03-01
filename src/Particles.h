@@ -15,6 +15,8 @@
 #include <dolfin/mesh/Mesh.h>
 #include <dolfin/function/Function.h>
 #include <dolfin/function/FunctionSpace.h>
+#include <dolfin/fem/GenericDofMap.h>
+#include <dolfin/geometry/BoundingBoxTree.h>
 
 namespace dolfin
 {
@@ -32,5 +34,5 @@ namespace dolfin
   };
 
 }
-
+    
 #endif
