@@ -54,8 +54,14 @@ solver.solve(U.vector(),bb)
 #solve(a==L,U,bcs)
 v, p = U.split()
 
+File('fuild_v.pvd') << v
 
 #
 # Now let's track some particles through it!
 #
 import fpl
+P = fpl.Particles(100,2)
+
+NT = 100
+for t in xrange(NT):
+    P.euler_step(v, 0.1)
