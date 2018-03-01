@@ -76,12 +76,30 @@ void Particles::CalcF(GenericVector * px, GenericVector * pv, GenericVector * pr
     const int c_orient = f_cell.orientation();
     // Eval fluid at particle position
     fluid_u(f_u,p_x[0],p_x[1]); //TODO: Optimize call with cell info
-
+    // Evaluate the force
     double kernel_force[dim];
     Kernel_F2P(dim, p_x,p_v,p_r, f_u.data(), kernel_force);
-    
+    // Add it to the particles
     if(f_f2p) {
       f_f2p->add_local(kernel_force,dim, v_dof_idx);
     }
-  }
+    // Apply it to the fluid... Need to grab the shape functions of velocity
+    if(f_p2f) {
+      // We need the Velocity shape functions first
+      double f_basis[dim*f_g_elem->space_dimension()];
+      f_g_elem->evaluate_basis_all(f_basis, p_x, f_vertex_coordinates.data(), c_orient);
+      // dolfin::ArrayView<const int> cix;
+      // const std::vector<dolfin::la_index>
+      dolfin::ArrayView<const int> f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
+      double f_loc[f_g_dofs.size()];
+      for(int j=0;j<f_g_dofs.size();j++) {
+	f_loc[j] = 0.0;
+	for(int i=0;i<dim;i++) {
+	  f_loc[j] += -kernel_force[i] * f_basis[f_g_dofs.size()*i + j];
+	}
+      }
+      f_p2f->add_local(f_loc,f_g_dofs.size(), f_g_dofs.data() );
+    } // End fluid assembly
+  } // End particle loop
+
 }
