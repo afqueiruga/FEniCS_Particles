@@ -90,7 +90,8 @@ void Particles::CalcF(GenericVector * px, GenericVector * pv, GenericVector * pr
       f_g_elem->evaluate_basis_all(f_basis, p_x, f_vertex_coordinates.data(), c_orient);
       // dolfin::ArrayView<const int> cix;
       // const std::vector<dolfin::la_index>
-      dolfin::ArrayView<const int> f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
+	  Eigen::Map<const Eigen::Array<int, -1, 1> > f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
+      //dolfin::ArrayView<const int> f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
       double f_loc[f_g_dofs.size()];
       for(int j=0;j<f_g_dofs.size();j++) {
 	f_loc[j] = 0.0;
