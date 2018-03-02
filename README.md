@@ -16,6 +16,12 @@ proppant-transport problems.
 This library requires C++ code which is compiled using the FEniCS' `compile_extension_module`
 routine. The library will appear in your instant cache, wherever you install this repository to.
 
+Note for developers: instant hashes the header file in the compiled module to determine its presence in the cache.
+If you modify the cpp only, instant won't recognize the change and recompile the module.
+My trick while I am developing to avoid recompiling everything else in the cache is to add random white space to the header file to change its hash value.
+
+An example one-way coupled code is included in [examples/test.py](examples/test.py).
+
 ## License
 
 Copyright (C) Alejandro Francisco Queiruga, 2015-2018
