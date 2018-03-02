@@ -10,7 +10,7 @@ L = 4.0
 h = 1.0
 Dp = 1.0
 mesh = RectangleMesh(Point(-L/2.0, -h/2.0),Point(L/2.0,h/2.0) ,40,40, "right/left")
-boundfunc = FacetFunction("uint", mesh)
+boundfunc = MeshFunction("size_t",mesh, mesh.topology().dim()-1)
 boundfunc.set_all(0)
 top = CompiledSubDomain(" x[1]>h/2.0-eps && on_boundary",h=h,L=L,eps=1.0e-12)
 top.mark(boundfunc,1)
