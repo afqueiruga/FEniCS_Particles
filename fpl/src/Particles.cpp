@@ -16,10 +16,10 @@ void Kernel_F2P(int dim,
 		double *u, double *f) {
   double vr[dim];
   for(int i=0;i<dim;i++) {
-    vr[i]=pv[i]-u[1+i]/u[0]; // v=g/rho
+    vr[i]=pv[i]-u[i]; // v=g/rho
   }
   double PIR2 = M_PI*pr[0]*pr[0];
-  double K = 0.5*u[0]*0.47*PIR2;
+  double K = 0.5*998.0*0.47*PIR2;
   for(int i=0;i<dim;i++) {
     f[i]= -K*norm(vr,dim)*vr[i];
   }
@@ -79,6 +79,11 @@ void Particles::CalcF(GenericVector * px, GenericVector * pv, GenericVector * pr
     // Evaluate the force
     double kernel_force[dim];
     Kernel_F2P(dim, p_x,p_v,p_r, f_u.data(), kernel_force);
+	/*std::cout << p_x[0] <<","<<p_x[1]<<" = "
+			  << p_v[0] <<","<<p_v[1]<<" = "
+	  		  << p_r[0] <<" = "
+	  		  << f_u.data()[0] <<","<<f_u.data()[1]<<" = "
+			  <<kernel_force[0]<<","<<kernel_force[1]<<std::endl;*/
     // Add it to the particles
     if(f_f2p) {
       f_f2p->add_local(kernel_force,dim, v_dof_idx);
@@ -87,7 +92,8 @@ void Particles::CalcF(GenericVector * px, GenericVector * pv, GenericVector * pr
     if(f_p2f) {
       // We need the Velocity shape functions first
       double f_basis[dim*f_g_elem->space_dimension()];
-      f_g_elem->evaluate_basis_all(f_basis, p_x, f_vertex_coordinates.data(), c_orient);
+      f_g_elem->evaluate_basis_all(f_basis, p_x, f_vertex_coordinates.data(),
+								   c_orient);
 	  // const std::vector<dolfin::la_index>
 	  //Eigen::Map<const Eigen::Array<int, -1, 1>> f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
       //dolfin::ArrayView<const int> f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
