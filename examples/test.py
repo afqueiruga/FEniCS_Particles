@@ -60,9 +60,9 @@ File('fuild_v.pvd') << v
 # Now let's track some particles through it!
 #
 import fpl
-P = fpl.Particles(10,2)
-P.init_grid( -0.5,-0.5, 0.5,0.5 )
+P = fpl.Particles(20,2)
+P.init_grid( -0.25,-0.25, 0.25,0.25 )
 NT = 500
 for t in xrange(NT):
     P.euler_step(v, 0.01)
-    print P.x.get_local(), P.v.get_local()
+    P.write_vtk("outs/p_{0}.vtk".format(t))
