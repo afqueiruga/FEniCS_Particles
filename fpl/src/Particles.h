@@ -34,5 +34,5 @@ namespace dolfin
   };
 
 }
-    
+
 #endif

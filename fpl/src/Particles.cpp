@@ -16,7 +16,7 @@ void Kernel_F2P(int dim,
 		double *u, double *f) {
   double vr[dim];
   for(int i=0;i<dim;i++) {
-    vr[i]=pv[i]-u[i]; // v=g/rho
+    vr[i]=pv[i]-u[i];
   }
   double PIR2 = M_PI*pr[0]*pr[0];
   double K = 0.5*998.0*0.47*PIR2;
@@ -100,10 +100,10 @@ void Particles::CalcF(GenericVector * px, GenericVector * pv, GenericVector * pr
 	  auto f_g_dofs = f_g_U->dofmap()->cell_dofs(cix);
       double f_loc[f_g_dofs.size()];
       for(int j=0;j<f_g_dofs.size();j++) {
-	f_loc[j] = 0.0;
-	for(int i=0;i<dim;i++) {
-	  f_loc[j] += -kernel_force[i] * f_basis[f_g_dofs.size()*i + j];
-	}
+		f_loc[j] = 0.0;
+		for(int i=0;i<dim;i++) {
+		  f_loc[j] += -kernel_force[i] * f_basis[f_g_dofs.size()*i + j];
+		}
       }
       f_p2f->add_local(f_loc,f_g_dofs.size(), f_g_dofs.data() );
     } // End fluid assembly
